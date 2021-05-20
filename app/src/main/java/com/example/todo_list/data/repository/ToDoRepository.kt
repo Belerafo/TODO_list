@@ -1,0 +1,14 @@
+package com.example.todo_list.data.repository
+
+import androidx.lifecycle.LiveData
+import com.example.todo_list.data.ToDoDao
+import com.example.todo_list.data.models.ToDoData
+
+class ToDoRepository(private val toDoDao: ToDoDao) {
+
+    val getAllData: LiveData<List<ToDoData>> = toDoDao.getAllData()
+
+    suspend fun insertData(toDoData: ToDoData){
+        toDoDao.insertData(toDoData)
+    }
+}

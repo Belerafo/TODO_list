@@ -1,8 +1,8 @@
-package com.example.todo_list.data
+package com.example.todo_list.data.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import org.jetbrains.annotations.PropertyKey
+import com.example.todo_list.data.models.Priority
 
 
 @Entity(tableName = "todo_table")
