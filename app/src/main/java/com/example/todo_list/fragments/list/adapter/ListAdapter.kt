@@ -1,16 +1,11 @@
-package com.example.todo_list.fragments.list
+package com.example.todo_list.fragments.list.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.todo_list.R
-import com.example.todo_list.data.models.Priority
 import com.example.todo_list.data.models.ToDoData
 import com.example.todo_list.databinding.RowLayoutBinding
-import kotlinx.android.synthetic.main.row_layout.view.*
 
 class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
 
@@ -22,7 +17,7 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
             binding.executePendingBindings()
         }
          companion object{
-             fun from(parent:ViewGroup): MyViewHolder{
+             fun from(parent:ViewGroup): MyViewHolder {
                  val layoutInflater = LayoutInflater.from(parent.context)
                  val binding = RowLayoutBinding.inflate(layoutInflater, parent, false)
                  return MyViewHolder(binding)
@@ -31,7 +26,7 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-       return  MyViewHolder.from(parent)
+       return MyViewHolder.from(parent)
     }
 
     override fun getItemCount(): Int {
@@ -44,7 +39,9 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
     }
 
     fun setData(toDoData: List<ToDoData>){
+        val toDoDiffUtil = ToDoDiffUtil(dataList,toDoData)
+        val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)
         this.dataList = toDoData
-        notifyDataSetChanged()
+        toDoDiffResult.dispatchUpdatesTo(this)
     }
 }
