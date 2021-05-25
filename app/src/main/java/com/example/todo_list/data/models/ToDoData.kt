@@ -3,8 +3,7 @@ package com.example.todo_list.data.models
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.todo_list.data.models.Priority
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 
 @Entity(tableName = "todo_table")

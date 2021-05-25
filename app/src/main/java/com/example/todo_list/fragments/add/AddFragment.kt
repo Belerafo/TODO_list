@@ -9,9 +9,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.todo_list.R
 import com.example.todo_list.data.models.ToDoData
 import com.example.todo_list.data.viewmodel.ToDoViewModel
+import com.example.todo_list.databinding.FragmentAddBinding
 import com.example.todo_list.fragments.SharedViewModel
-import kotlinx.android.synthetic.main.fragment_add.*
-import kotlinx.android.synthetic.main.fragment_add.view.*
 
 
 class AddFragment : Fragment() {
@@ -19,24 +18,25 @@ class AddFragment : Fragment() {
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
 
-
+    private var _binding: FragmentAddBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
 
 
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_add, container, false)
+     _binding =  FragmentAddBinding.inflate(layoutInflater, container, false)
 
         //Set Menu
         setHasOptionsMenu(true)
 
-        view.priority_spinner.onItemSelectedListener = mSharedViewModel.listener
+        binding.prioritySpinner.onItemSelectedListener = mSharedViewModel.listener
 
-        return view
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -51,16 +51,16 @@ class AddFragment : Fragment() {
     }
 
     private fun insertDataToDb() {
-        val mTitile = title_et.text.toString()
-        val mPriority = priority_spinner.selectedItem.toString()
-        val mDescription = description_et.text.toString()
+        val mTitle = binding.titleEt.text.toString()
+        val mPriority = binding.prioritySpinner.selectedItem.toString()
+        val mDescription = binding.descriptionEt.text.toString()
 
-        val validation = mSharedViewModel.verifyDataFromUser(mTitile,mDescription)
+        val validation = mSharedViewModel.verifyDataFromUser(mTitle,mDescription)
         if(validation){
             //Insert Data to Database
             val newData = ToDoData(
                     0,
-                    mTitile,
+                    mTitle,
                     mSharedViewModel.parsePriority(mPriority),
                     mDescription
             )
@@ -73,5 +73,9 @@ class AddFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
 }

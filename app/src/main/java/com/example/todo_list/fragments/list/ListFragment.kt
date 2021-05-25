@@ -3,7 +3,6 @@ package com.example.todo_list.fragments.list
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
-import android.widget.GridLayout
 import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -16,9 +15,9 @@ import com.example.todo_list.data.viewmodel.ToDoViewModel
 import com.example.todo_list.databinding.FragmentListBinding
 import com.example.todo_list.fragments.SharedViewModel
 import com.example.todo_list.fragments.list.adapter.ListAdapter
+import com.example.todo_list.utils.hideKeyboard
+import com.example.todo_list.utils.observeOnce
 import com.google.android.material.snackbar.Snackbar
-import jp.wasabeef.recyclerview.animators.*
-
 
 class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
@@ -35,7 +34,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
           // Data binding
         _binding = FragmentListBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
@@ -48,10 +47,14 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer { data ->
             mSharedViewModel.checkIfDataBaseEmpty(data)
             adapter.setData(data)
+            binding.recyclerView.scheduleLayoutAnimation()
         })
 
         //Set Menu
         setHasOptionsMenu(true)
+
+        //Hide soft keyboard
+        hideKeyboard(requireActivity())
 
         return binding.root
     }
@@ -60,9 +63,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         val recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
         recyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
-        recyclerView.itemAnimator = OvershootInLeftAnimator().apply {
-            addDuration = 500
-        }
 
         //Swipe to Delete
         swipeToDelete(recyclerView)
@@ -134,7 +134,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun searchThroughDatabase(query: String) {
         val searchQuery = "%$query%"
 
-        mToDoViewModel.searchDatabase(searchQuery).observe(this, Observer { list ->
+        mToDoViewModel.searchDatabase(searchQuery).observeOnce(viewLifecycleOwner, Observer { list ->
             list?.let{
                 adapter.setData(it)
             }
