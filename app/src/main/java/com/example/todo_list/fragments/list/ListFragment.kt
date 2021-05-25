@@ -36,7 +36,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Data binding
+          // Data binding
         _binding = FragmentListBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.mSharedViewModel = mSharedViewModel
@@ -49,8 +49,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             mSharedViewModel.checkIfDataBaseEmpty(data)
             adapter.setData(data)
         })
-
-
 
         //Set Menu
         setHasOptionsMenu(true)
