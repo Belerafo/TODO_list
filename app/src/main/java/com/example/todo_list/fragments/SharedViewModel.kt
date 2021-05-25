@@ -1,4 +1,4 @@
-package com.example.todo_list.fragmets
+package com.example.todo_list.fragments
 
 import android.app.Application
 import android.text.TextUtils
@@ -14,11 +14,15 @@ import com.example.todo_list.data.models.ToDoData
 
 class SharedViewModel(application: Application): AndroidViewModel(application) {
 
+    /** ============================ List Fragment ============================= */
+
     val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(true)
 
     fun checkIfDataBaseEmpty(toDoData: List<ToDoData>){
         emptyDatabase.value = toDoData.isEmpty()
     }
+
+    /** ================================= Add/Update Fragment ============================= */
 
     val listener: AdapterView.OnItemSelectedListener = object :
         AdapterView.OnItemSelectedListener{
@@ -56,12 +60,5 @@ class SharedViewModel(application: Application): AndroidViewModel(application) {
             else -> Priority.LOW
         }
     }
-    fun parsePriorityToInt(priority: Priority): Int{
-        return when(priority){
-            Priority.HIGH -> 0
-            Priority.MEDIUM -> 1
-            Priority.LOW -> 2
-        }
 
-    }
 }

@@ -1,4 +1,4 @@
-package com.example.todo_list.fragmets.list
+package com.example.todo_list.fragments.list
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +10,6 @@ import com.example.todo_list.R
 import com.example.todo_list.data.models.Priority
 import com.example.todo_list.data.models.ToDoData
 import kotlinx.android.synthetic.main.row_layout.view.*
-import java.util.zip.Inflater
 
 class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
 

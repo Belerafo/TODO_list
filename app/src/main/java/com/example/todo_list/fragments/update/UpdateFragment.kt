@@ -1,8 +1,7 @@
-package com.example.todo_list.fragmets.update
+package com.example.todo_list.fragments.update
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.renderscript.RenderScript
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -10,13 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todo_list.R
-import com.example.todo_list.data.models.Priority
 import com.example.todo_list.data.models.ToDoData
 import com.example.todo_list.data.viewmodel.ToDoViewModel
-import com.example.todo_list.fragmets.SharedViewModel
+import com.example.todo_list.databinding.FragmentUpdateBinding
+import com.example.todo_list.fragments.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_update.*
 import kotlinx.android.synthetic.main.fragment_update.view.*
-import kotlinx.android.synthetic.main.row_layout.*
 
 class UpdateFragment : Fragment() {
 
@@ -25,22 +23,24 @@ class UpdateFragment : Fragment() {
     private val mSharedViewModel: SharedViewModel by viewModels()
     private val mToDoViewModel: ToDoViewModel by viewModels()
 
+    private var _binding: FragmentUpdateBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_update, container, false)
+        // Data binding
+        _binding = FragmentUpdateBinding.inflate(inflater, container, false)
+        binding.args = args
 
         //Set menu
         setHasOptionsMenu(true)
 
-        view.current_title_et.setText(args.currentItem.title)
-        view.current_description_et.setText(args.currentItem.description)
-        view.current_priority_spinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))
-        view.current_priority_spinner.onItemSelectedListener = mSharedViewModel.listener
+        //Spinner Item Select Listener
+        binding.currentPrioritySpinner.onItemSelectedListener = mSharedViewModel.listener
 
-        return view
+        return binding.root
 
 
     }
@@ -97,5 +97,10 @@ class UpdateFragment : Fragment() {
         builder.setTitle("Delete '${args.currentItem.title}'?")
         builder.setMessage("Are you sure you want to remove '${args.currentItem.title}'?")
         builder.create().show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
